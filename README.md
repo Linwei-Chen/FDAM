@@ -12,6 +12,8 @@ The code is being organized, and will be released soon.
 - **Prevents Representation Collapse:** Effectively mitigates frequency vanishing and rank collapse in deep ViTs, leading to more diverse and discriminative features.
 - **Plug-and-Play & Efficient:** Seamlessly integrates into existing ViT architectures (like DeiT, SegFormer, MaskDINO) with minimal computational overhead.
 
+![image-20250214164031767](README.assets/fdam.png)
+
 ## 📈 Performance Highlights
 
 ### Semantic Segmentation (ADE20K val set)
