@@ -1,5 +1,5 @@
 _base_ = './upernet_vit-b16_mln_512x512_80k_ade20k.py'
-
+# mmseg=0.25.0
 # https://github.com/facebookresearch/xcit/blob/main/semantic_segmentation/backbone/xcit.py
 model = dict(
     # pretrained='/data4/chenlinwei/code/ResolutionDet/mmsegmentation/pretrained/mmseg_deit_base_patch16_224-b5f2ef4d.pth',
