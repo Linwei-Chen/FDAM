@@ -1,6 +1,7 @@
 # FDAM: Frequency-Dynamic Attention Modulation
 
 **[ICCV 2025]** Official implementation of *Frequency-Dynamic Attention Modulation for Dense Prediction* [(paper link)](https://arxiv.org/abs/2507.12006).
+
 FDAM revitalizes Vision Transformers by tackling frequency vanishing. It dynamically modulates the frequency response of attention layers, enabling the model to preserve critical details and textures for superior dense prediction performance.
 
 
