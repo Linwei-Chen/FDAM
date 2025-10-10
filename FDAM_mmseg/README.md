@@ -6,6 +6,10 @@ This guide provides detailed instructions to reproduce the semantic segmentation
 
 Before proceeding, please ensure you have completed the full installation as described in the [main `README.md`](../README.md) of this repository. This includes installing PyTorch, `mmcv-full`, and `mmsegmentation`.
 
+```
+pip install requirements.txt
+```
+
 ### 2. Dataset Preparation
 
 This experiment requires the **ADE20K** dataset.
