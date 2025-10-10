@@ -51,6 +51,101 @@ FDAM achieves **state-of-the-art** results in single-scale settings, showcasing 
 | -------- | -------- | ---------- | ----------- |
 | LSKNet-S | 77.49    | **78.61**  | **+1.12**   |
 
+### ⚡ Quick Start: Plug-and-Play FDAM Integration
+
+Integrating FDAM into your existing Vision Transformer is straightforward. The core idea is to replace the standard Attention with our AttentionwithAttInv and insert a GroupDynamicScale module after both the attention and MLP blocks. This enhances the model's ability to process frequency information with minimal code changes.
+
+Below is a side-by-side comparison of a standard Transformer Block and our FDAM-enhanced Layer_scale_init_Block.
+
+#### 1. Standard Transformer Block
+
+A typical Block in a Vision Transformer looks like this:
+
+codePython
+
+```
+import torch.nn as nn
+from timm.models.layers import DropPath
+from timm.models.vision_transformer import Attention, Mlp
+
+class StandardBlock(nn.Module):
+    def __init__(self, dim, num_heads, mlp_ratio=4., drop_path=0., norm_layer=nn.LayerNorm):
+        super().__init__()
+        self.norm1 = norm_layer(dim)
+        self.attn = Attention(dim, num_heads=num_heads)
+        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self.norm2 = norm_layer(dim)
+        self.mlp = Mlp(in_features=dim, hidden_features=int(dim * mlp_ratio))
+
+    def forward(self, x):
+        # Attention block
+        x = x + self.drop_path(self.attn(self.norm1(x)))
+        # MLP block
+        x = x + self.drop_path(self.mlp(self.norm2(x)))
+        return x
+```
+
+#### 2. Upgrading to an FDAM Block
+
+To upgrade to FDAM, simply follow these three steps:
+
+1. **Replace Attention with AttentionwithAttInv:** This module introduces a high-frequency path.
+2. **Add GroupDynamicScale after attention:** This module performs frequency scaling on the features from the attention block.
+3. **Add GroupDynamicScale after the MLP:** This scales the features from the MLP block.
+
+Here is the code for our Layer_scale_init_Block, which encapsulates these changes:
+
+codePython
+
+```
+# Assuming AttentionwithAttInv and GroupDynamicScale are defined as in deit_fdam.py
+# and utility functions nlc_to_nchw, nchw_to_nlc are available.
+
+class FdamBlock(nn.Module):
+    def __init__(self, dim, num_heads, mlp_ratio=4., drop_path=0., norm_layer=nn.LayerNorm, init_values=1e-4):
+        super().__init__()
+        # --- Standard components ---
+        self.norm1 = norm_layer(dim)
+        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self.norm2 = norm_layer(dim)
+        self.mlp = Mlp(in_features=dim, hidden_features=int(dim * mlp_ratio))
+        self.gamma_1 = nn.Parameter(init_values * torch.ones(dim))
+        self.gamma_2 = nn.Parameter(init_values * torch.ones(dim))
+        
+        # --- FDAM-specific upgrades ---
+        # 1. Replace Attention with AttentionwithAttInv
+        self.attn = AttentionwithAttInv(dim, num_heads=num_heads)
+        
+        # 2. Add GroupDynamicScale after Attention and MLP
+        self.freq_scale_1 = GroupDynamicScale(dim=dim)
+        self.freq_scale_2 = GroupDynamicScale(dim=dim)
+
+    def forward(self, x, H, W):
+        # --- Attention block with FDAM ---
+        x_att = self.attn(self.norm1(x))
+        
+        # Reshape for GroupDynamicScale (N, L, C) -> (N, C, H, W)
+        x_att_reshaped = nlc_to_nchw(x_att, (H, W))
+        x_att_scaled = self.freq_scale_1(x_att_reshaped) + x_att_reshaped
+        x_att = nchw_to_nlc(x_att_scaled)
+        
+        x = x + self.drop_path(self.gamma_1 * x_att)
+
+        # --- MLP block with FDAM ---
+        x_mlp = self.mlp(self.norm2(x))
+
+        # Reshape for GroupDynamicScale
+        x_mlp_reshaped = nlc_to_nchw(x_mlp, (H, W))
+        x_mlp_scaled = self.freq_scale_2(x_mlp_reshaped) + x_mlp_reshaped
+        x_mlp = nchw_to_nlc(x_mlp_scaled)
+
+        x = x + self.drop_path(self.gamma_2 * x_mlp)
+        
+        return x
+```
+
+By replacing your standard Block with this FDAM-enhanced FdamBlock (or our provided Layer_scale_init_Block), you can seamlessly integrate frequency-dynamic modulation into your Vision Transformer models.
+
 ## 🛠 Installation
 
 Our implementation is built on top of [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) and [MMDetection](https://github.com/open-mmlab/mmdetection). To ensure compatibility, we recommend following this step-by-step guide.
