@@ -1,9 +1,15 @@
 # FDAM: Frequency-Dynamic Attention Modulation
 
-**[ICCV 2025]** Official implementation of *Frequency-Dynamic Attention Modulation for Dense Prediction*.
+**[ICCV 2025]** Official implementation of *Frequency-Dynamic Attention Modulation for Dense Prediction* [(paper link)](https://arxiv.org/abs/2507.12006).
 FDAM revitalizes Vision Transformers by tackling frequency vanishing. It dynamically modulates the frequency response of attention layers, enabling the model to preserve critical details and textures for superior dense prediction performance.
 
-The code is being organized, and will be released soon.
+
+
+# 📰 News
+
+- **2025-10-10** : Training code and weights for DeiT-III-Base on ADE20K are now available.
+
+
 
 ## 🚀 Key Features
 
@@ -20,10 +26,11 @@ The code is being organized, and will be released soon.
 
 FDAM boosts performance on various backbones, including CNN-based, ViT-based, and even recent Mamba-based models.
 
-| Backbone     | Base mIoU (SS) | + FDAM mIoU (SS) | Improvement |
-| ------------ | -------------- | ---------------- | ----------- |
-| SegFormer-B0 | 37.4           | **39.8**         | **+2.4**    |
-| DeiT-S       | 42.9           | **44.3**         | **+1.4**    |
+| Backbone                                                     | Base mIoU (SS)                                   | + FDAM mIoU (SS)     | Improvement |
+| ------------------------------------------------------------ | ------------------------------------------------ | -------------------- | ----------- |
+| SegFormer-B0                                                 | 37.4                                             | **39.8**             | **+2.4**    |
+| DeiT-S                                                       | 42.9                                             | **44.3**             | **+1.4**    |
+| DeiT-III-B [(config)](./FDAM_mmseg/configs/vit/upernet_deit3-b16_512x512_160k_ade20k_freq.py) | 51.8 [(paper)](https://arxiv.org/pdf/2204.07118) | **52.6** [(model)]() | **+0.8**    |
 
 ### Object Detection & Instance Segmentation (COCO val2017)
 
@@ -45,12 +52,56 @@ FDAM achieves **state-of-the-art** results in single-scale settings, showcasing 
 
 ## 🛠 Installation
 
-Our implementation is primarily based on [mmdetection](https://www.google.com/url?sa=E&q=https%3A%2F%2Fgithub.com%2Fopen-mmlab%2Fmmdetection) and [mmsegmentation](https://www.google.com/url?sa=E&q=https%3A%2F%2Fgithub.com%2Fopen-mmlab%2Fmmsegmentation). Please follow their official guides for installation.
+Our implementation is built on top of [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) and [MMDetection](https://github.com/open-mmlab/mmdetection). To ensure compatibility, we recommend following this step-by-step guide.
 
-1. Install PyTorch and torchvision.
-2. Install mmcv.
-3. Install mmdetection and mmsegmentation.
-4. Clone this repository.
+### 1. Prerequisites
+
+- Python 3.8 or higher
+- PyTorch 1.11.0
+- CUDA 11.3
+
+### 2. Set Up a Virtual Environment (Recommended)
+It is highly recommended to use a virtual environment to avoid package conflicts.
+
+```bash
+# Using conda
+conda create -n fdam python=3.8 -y
+conda activate fdam
+
+# Using venv
+python -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install PyTorch
+Install PyTorch and its companion libraries, ensuring they are compatible with CUDA 11.3.
+
+```bash
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 -f https://download.pytorch.org/whl/cu113
+```
+
+### 4. Install OpenMMLab Dependencies
+
+Install `mmcv-full`, which is a prerequisite for MMDetection and MMSegmentation.
+
+```bash
+pip install mmcv-full==1.5.3 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11.0/index.html
+```
+Next, install MMDetection and MMSegmentation.
+
+```bash
+pip install mmsegmentation==0.25.0
+```
+
+### 5. Clone and Install FDAM
+Finally, clone this repository to your local machine.
+
+```bash
+git clone https://github.com/your-repo/FDAM.git
+cd FDAM
+```
+
+You should now have a complete environment to run the training and evaluation scripts. For more detailed guidance on the MMLab environment, please refer to the official [MMSegmentation installation guide](https://github.com/open-mmlab/mmsegmentation/blob/0.x/docs/en/get_started.md#installation).
 
 ## 📖 Citation
 
