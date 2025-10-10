@@ -61,9 +61,7 @@ Below is a side-by-side comparison of a standard Transformer Block and our FDAM-
 
 A typical Block in a Vision Transformer looks like this:
 
-codePython
-
-```
+```python
 import torch.nn as nn
 from timm.models.layers import DropPath
 from timm.models.vision_transformer import Attention, Mlp
@@ -95,9 +93,7 @@ To upgrade to FDAM, simply follow these three steps:
 
 Here is the code for our Layer_scale_init_Block, which encapsulates these changes:
 
-codePython
-
-```
+```python
 # Assuming AttentionwithAttInv and GroupDynamicScale are defined as in deit_fdam.py
 # and utility functions nlc_to_nchw, nchw_to_nlc are available.
 
