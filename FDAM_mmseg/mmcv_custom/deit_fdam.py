@@ -286,7 +286,7 @@ class FlashAttn(nn.Module):
             x = self._naive_attn(x) if not self.use_flash_attn else self._flash_attn(x)
             return x
         
-class Attention(nn.Module):
+class AttentionwithAttInv(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     def __init__(self, dim, num_heads=8, qkv_bias=False, qk_scale=None, attn_drop=0., proj_drop=0., lf_dy_weight=True, hf_dy_weight=True):
         super().__init__()
@@ -571,7 +571,7 @@ class WindowedAttention(nn.Module):
 class Block(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,Attention_block = Attention,Mlp_block=MLP
+                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,Attention_block = AttentionwithAttInv, Mlp_block=MLP
                  ,init_values=1e-4):
         super().__init__()
         self.norm1 = norm_layer(dim)
@@ -623,7 +623,7 @@ class Layer_scale_init_Block(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     # with slight modifications
     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, Attention_block = Attention,Mlp_block=MLP
+                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, Attention_block = AttentionwithAttInv, Mlp_block=MLP
                  ,init_values=1e-4, window_size=-1, use_flash_attn=False, with_cp=False):
         super().__init__()
         self.norm1 = norm_layer(dim)
@@ -695,7 +695,7 @@ class Layer_scale_init_Block_paralx2(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     # with slight modifications
     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,Attention_block = Attention,Mlp_block=Mlp
+                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,Attention_block = AttentionwithAttInv, Mlp_block=Mlp
                  ,init_values=1e-4):
         super().__init__()
         self.norm1 = norm_layer(dim)
@@ -726,7 +726,7 @@ class Block_paralx2(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     # with slight modifications
     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,Attention_block = Attention,Mlp_block=Mlp
+                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,Attention_block = AttentionwithAttInv, Mlp_block=Mlp
                  ,init_values=1e-4):
         super().__init__()
         self.norm1 = norm_layer(dim)
@@ -791,7 +791,7 @@ class vit_models_freq(BaseModule):
                  norm_layer=partial(nn.LayerNorm, eps=1e-6),
                  block_layers=Layer_scale_init_Block,
                  act_layer=nn.GELU,
-                 Attention_block = Attention, Mlp_block=MLP,
+                 Attention_block = AttentionwithAttInv, Mlp_block=MLP,
                  use_cls_token=False,
                  init_scale=1e-4, window_size=None, window_attn=None,
                  output_dtype="float32", pretrained=None,
