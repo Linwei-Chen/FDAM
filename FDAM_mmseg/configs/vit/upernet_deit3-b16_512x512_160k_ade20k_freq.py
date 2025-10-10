@@ -3,7 +3,7 @@ _base_ = './upernet_vit-b16_mln_512x512_80k_ade20k.py'
 # https://github.com/facebookresearch/xcit/blob/main/semantic_segmentation/backbone/xcit.py
 model = dict(
     # download from https://dl.fbaipublicfiles.com/deit/deit_3_base_224_21k.pth
-    pretrained='/data4/chenlinwei/code/ResolutionDet/mmsegmentation/pretrained/deit_3_base_224_21k.pth',
+    pretrained='./pretrained/deit_3_base_224_21k.pth',
     backbone=dict(
         type='vit_models_freq',
         img_size=512, 

@@ -27,11 +27,11 @@ FDAM revitalizes Vision Transformers by tackling frequency vanishing. It dynamic
 
 FDAM boosts performance on various backbones, including CNN-based, ViT-based, and even recent Mamba-based models.
 
-| Backbone                                                     | Base mIoU (SS)                                   | + FDAM mIoU (SS)     | Improvement |
-| ------------------------------------------------------------ | ------------------------------------------------ | -------------------- | ----------- |
-| SegFormer-B0                                                 | 37.4                                             | **39.8**             | **+2.4**    |
-| DeiT-S                                                       | 42.9                                             | **44.3**             | **+1.4**    |
-| DeiT-III-B [(config)](./FDAM_mmseg/configs/vit/upernet_deit3-b16_512x512_160k_ade20k_freq.py) | 51.8 [(paper)](https://arxiv.org/pdf/2204.07118) | **52.6** [(model)]() | **+0.8**    |
+| Backbone                                                     | Base mIoU (SS)                                   | + FDAM mIoU (SS)                                             | Improvement |
+| ------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------ | ----------- |
+| SegFormer-B0                                                 | 37.4                                             | **39.8**                                                     | **+2.4**    |
+| DeiT-S                                                       | 42.9                                             | **44.3**                                                     | **+1.4**    |
+| DeiT-III-B [(config)](./FDAM_mmseg/configs/vit/upernet_deit3-b16_512x512_160k_ade20k_freq.py) | 51.8 [(paper)](https://arxiv.org/pdf/2204.07118) | **52.6** [(model)](https://pan.baidu.com/s/1bylU0PojPlbsE1-ERbB05w?pwd=ICCV) | **+0.8**    |
 
 ### Object Detection & Instance Segmentation (COCO val2017)
 
