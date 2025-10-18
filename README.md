@@ -9,6 +9,7 @@ FDAM revitalizes Vision Transformers by tackling frequency vanishing. It dynamic
 # 📰 News
 
 - **2025-10-10** : [Training code](./FDAM_mmseg) and weights for DeiT-III-Base on ADE20K are now available.
+- **2025-10-16**: [机器之心 Report](https://mp.weixin.qq.com/s/eCN-0K5TQCX0nWA0CacWTQ).
 
 
 
